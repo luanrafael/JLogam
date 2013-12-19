@@ -7,3 +7,5 @@ JLogam is a HTML 5 project to provide gesture based interfaces for mobile applic
 
 
 Demo: http://jsfiddle.net/luanrafael/tMqLk/
+
+Page: http://luanrafael.github.io/JLogam/
