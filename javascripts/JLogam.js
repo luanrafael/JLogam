@@ -64,18 +64,17 @@ function checkMoviment() {
     listz = [];
     cont = 0;
     if (avgx > 180 && avgx < 300 && avgy >= -20 && avgy <= 20 && avgz >= -30 && avgz <= 30) {
-    	console.log("Initial Movement - ", avgx, avgy, avgz);
+    	console.log("Initial Moviment - ", avgx, avgy, avgz);
         cheers = true;
         document.getElementById("imagem").setAttribute("src", "");
         return true;
     }
     if (avgx > 170 && avgx < 270 && avgy >= -140 && avgy <= -40 && avgz >= -30 && avgz <= 30) {
-        console.log("Final Movement - ", avgx, avgy, avgz);
+        console.log("Final Moviment - ", avgx, avgy, avgz);
         if (cheers) {
-        	//Action
-            document.getElementById("btnTweet").click();
-            navigator.vibrate(1000);
+            //Action
             cheers = false;
+            navigator.vibrate(1000);
             console.log("Tim... Tim..., cheers! \n( _ )\n _|_");
         }
         return true;
