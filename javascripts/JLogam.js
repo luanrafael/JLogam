@@ -11,7 +11,7 @@ var cheers = false;
 var supportsVibrate = "vibrate" in navigator;
 
 window.onload = function () {
-	console.log("started");
+    console.log("started");
     if (window.DeviceOrientationEvent || window.OrientationEvent) {
         window.addEventListener('deviceorientation', devOrientHandler, false);
     } else {
@@ -23,7 +23,7 @@ window.onload = function () {
 //Accelerometer Listener
 function devOrientHandler(event) {
 
-	var x = event.alpha;
+    var x = event.alpha;
     var y = event.beta;
     var z = event.gamma;
 
@@ -64,19 +64,13 @@ function checkMoviment() {
     listz = [];
     cont = 0;
     if (avgx > 180 && avgx < 300 && avgy >= -20 && avgy <= 20 && avgz >= -30 && avgz <= 30) {
-    	console.log("Initial Moviment - ", avgx, avgy, avgz);
+        console.log("Initial Moviment - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
         cheers = true;
-        document.getElementById("imagem").setAttribute("src", "");
         return true;
     }
     if (avgx > 170 && avgx < 270 && avgy >= -140 && avgy <= -40 && avgz >= -30 && avgz <= 30) {
         console.log("Final Moviment - ", avgx, avgy, avgz);
-        if (cheers) {
-            //Action
-            cheers = false;
-            navigator.vibrate(1000);
-            console.log("Tim... Tim..., cheers! \n( _ )\n _|_");
-        }
+        actionTwitte(cheers);
         return true;
     }
     return false;
@@ -97,3 +91,13 @@ Array.prototype.avg = function () {
     }
     return av / cnt;
 };
+
+function actionTwitte(arg){
+    if (arg) {
+        cheers = false;
+        navigator.vibrate(1000);
+        console.log("Tim... Tim..., cheers! \n( _ )\n _|_");
+        window.location.assign("https://twitter.com/intent/tweet?hashtags=JLogam%2C&original_referer=http%3A%2F%2Flocalhost%3A8080%2FJLogam%2Fdemo%2Fcheers.html&related=lrpinheiroo&text=JLogam%20-%20JavaScript%20Libary%20for%20Open%20Gestures%20Acessibility%20Mobile&tw_p=tweetbutton");
+    }
+    return arg;
+}
