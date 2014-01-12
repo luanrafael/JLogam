@@ -9,23 +9,37 @@ var cont = 0;
 var cheers = false;
 
 var supportsVibrate = "vibrate" in navigator;
-
+var ball;
 window.onload = function () {
+
     console.log("started");
-    if (window.DeviceOrientationEvent || window.OrientationEvent) {
+    ball = document.getElementById("bolinha");
+
+    if (window.DeviceOrientationEvent){
         window.addEventListener('deviceorientation', devOrientHandler, false);
-    } else {
-        alert("Not Supported");
+    }  else {
+        alert("Not Supported - deviceorientation");
     }
+    shortcut.add("Enter",function() {
+        if(document.activeElement == document.getElementById("clitext")){
+            cliSimulate();
+        }
+    });
 
 };
 
 //Accelerometer Listener
 function devOrientHandler(event) {
-
     var x = event.alpha;
     var y = event.beta;
     var z = event.gamma;
+
+    if(x !== null && y !== null && z !== null){
+        if(cheers === false){
+            ball.style.background = 'blue';
+        }
+    }
+
 
     if (alpha != x || beta != y || gamma != z) {
         alpha = x;
@@ -54,7 +68,6 @@ function readData(alpha, beta, gamma) {
     }
 }
 
-//moviment listener
 function checkMoviment() {
     avgx = listx.avg();
     avgy = listy.avg();
@@ -63,8 +76,9 @@ function checkMoviment() {
     listy = [];
     listz = [];
     cont = 0;
-    if (avgx > 180 && avgx < 300 && avgy >= -20 && avgy <= 20 && avgz >= -30 && avgz <= 30) {
+    if (avgx > 180 && avgx < 300 && avgy >= -40 && avgy <= 40 && avgz >= -60 && avgz <= 60) {
         console.log("Initial Moviment - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        ball.style.background = 'green';
         cheers = true;
         return true;
     }

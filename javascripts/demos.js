@@ -1,11 +1,3 @@
-window.onload = function(){
-		shortcut.add("Enter",function() {
-		if(document.activeElement == document.getElementById("clitext")){
-			cliSimulate();
-		}
-	});
-
-};
 
 function cliSimulate(){
 	var command = document.getElementById("clitext").value;
