@@ -8,8 +8,11 @@ var listz = [];
 var cont = 0;
 var cheers = false;
 
-var supportsVibrate = "vibrate" in navigator;
+
 var ball;
+var argNavAppName = 1;
+var supportsVibrate = "vibrate" in navigator;
+
 window.onload = function () {
 
     console.log("started");
@@ -18,13 +21,15 @@ window.onload = function () {
     if (window.DeviceOrientationEvent){
         window.addEventListener('deviceorientation', devOrientHandler, false);
     }  else {
-        alert("Not Supported - deviceorientation");
+        alert("JLogam is not supported");
     }
+    
     shortcut.add("Enter",function() {
         if(document.activeElement == document.getElementById("clitext")){
             cliSimulate();
         }
     });
+
 
 };
 
@@ -38,6 +43,8 @@ function devOrientHandler(event) {
         if(cheers === false){
             ball.style.background = 'blue';
         }
+    } else {
+        alert("JLogam is not supported");
     }
 
 
@@ -82,9 +89,10 @@ function checkMoviment() {
         cheers = true;
         return true;
     }
-    if (avgx > 170 && avgx < 270 && avgy >= -140 && avgy <= -40 && avgz >= -30 && avgz <= 30) {
-        console.log("Final Moviment - ", avgx, avgy, avgz);
+ 
+    if (avgx > 170 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
         actionTwitte(cheers);
+        console.log("Final Moviment - ", avgx, avgy, avgz);
         return true;
     }
     return false;
@@ -108,10 +116,13 @@ Array.prototype.avg = function () {
 
 function actionTwitte(arg){
     if (arg) {
+        if(supportsVibrate){
+            navigator.vibrate(1000);
+        }
         cheers = false;
-        navigator.vibrate(1000);
         console.log("Tim... Tim..., cheers! \n( _ )\n _|_");
         window.location.assign("https://twitter.com/intent/tweet?hashtags=JLogam%2C&original_referer=http%3A%2F%2Flocalhost%3A8080%2FJLogam%2Fdemo%2Fcheers.html&related=lrpinheiroo&text=JLogam%20-%20JavaScript%20Libary%20for%20Open%20Gestures%20Acessibility%20Mobile&tw_p=tweetbutton");
+   
     }
     return arg;
 }
