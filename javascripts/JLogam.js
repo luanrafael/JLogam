@@ -8,106 +8,126 @@ var listz = [];
 
 var gestures = [];
 
-gestures["cheers"] = ""; 
+var listgestures = [];
 
 var cont = 0;
-var cheers = false;
-var argNavAppName = 1;
-var supportsVibrate = "vibrate" in navigator;
-var ball = document.getElementById("bolinha");
 var callback;
+var isCheersConfigured;
+
+
+function JLogamSetup(){
+    listgestures[0] = "cheers";
+    isCheersConfigured = false;
+    return isSupported();
+}
+
+
+function isSupported(){
+    if (window.DeviceOrientationEvent){
+        window.addEventListener('deviceorientation', gestureListener, false);
+        return true;
+    }
+    return false;
+}
+
 
 JLogam = {
-    'set' : function(gesture,argccallback){
-        gestures[gesture] = argccallback; 
-        callback = argccallback;
-        console.log("started");
 
-        if (window.DeviceOrientationEvent){
-            window.addEventListener('deviceorientation', devOrientHandler, false);
-        }  else {
-            alert("JLogam is not supported");
-        }
+    'setup' : function (){
+        listgestures[0] = "cheers";
+        isCheersConfigured = false;
+        return isSupported();
+    },
 
-        shortcut.add("Enter",function() {
-            if(document.activeElement == document.getElementById("clitext")){
-                cliSimulate();
-            }
-        });
+    'on' : function(arggesture,argcallback){
+        gestures[arggesture] = argcallback;
+    },
+
+    'off' : function (arggesture){
+        gestures[arggesture] = '';  
     }
 
 };
 
+function gestureListener(event){
+    var x = event.alpha;
+    var y = event.beta;
+    var z = event.gamma;
 
-    //Accelerometer Listener
-    function devOrientHandler(event) {
-        var x = event.alpha;
-        var y = event.beta;
-        var z = event.gamma;
-        ball = document.getElementById("bolinha");
-        if(x !== null && y !== null && z !== null){
-            if(cheers === false){
-                ball.style.background = 'blue';
+    if(x === null && y === null && z === null){
+        alert("JLogam is not supported");
+    }
+
+
+    if (alpha != x || beta != y || gamma != z) {
+        alpha = x;
+        beta = y;
+        gamma = z;
+
+        roundX = Math.round(alpha);
+        roundY = Math.round(beta);
+        roundZ = Math.round(gamma);
+        setInterval(readData(roundX, roundY, roundZ), 500);
+        return true;
+    }
+    return false;
+}
+
+
+function readData(alpha, beta, gamma) {
+
+    listx[cont] = alpha;
+    listy[cont] = beta;
+    listz[cont] = gamma;
+
+    cont += 1;
+
+    if (cont >= 15) {
+        checkMoviment();
+    }
+}
+
+
+function checkMoviment(){
+    avgx = listx.avg();
+    avgy = listy.avg();
+    avgz = listz.avg();
+    listx = [];
+    listy = [];
+    listz = [];
+    cont = 0;
+    for (var i = listgestures.length - 1; i >= 0; i--) {
+        var argexec = listgestures[i];
+        callback = gestures[argexec];
+        if(callback != ''){
+            window[argexec].call();
+        }       
+    }
+}
+
+
+function cheers () {
+        bb = document.getElementById("bolinha");
+        if(!isCheersConfigured){        
+            console.log("Moviment 1 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+            if (avgx > 115 && avgx < 300 && avgy >= -15 && avgy <= 15 && avgz >= -60 && avgz <= 60) {
+                isCheersConfigured = true;
+                bb.style.background = "green";
+                return false;
             }
-        } else {
-            alert("JLogam is not supported");
         }
-
-
-        if (alpha != x || beta != y || gamma != z) {
-            alpha = x;
-            beta = y;
-            gamma = z;
-
-            roundX = Math.round(alpha);
-            roundY = Math.round(beta);
-            roundZ = Math.round(gamma);
-            setInterval(readData(roundX, roundY, roundZ), 500);
-            return true;
+        
+        if(isCheersConfigured){
+            console.log("Moviment 2 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+            if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
+                isCheersConfigured = false;
+                callback();
+                return true;
+            }
         }
         return false;
-    }
 
-    function readData(alpha, beta, gamma) {
-
-        listx[cont] = alpha;
-        listy[cont] = beta;
-        listz[cont] = gamma;
-
-        cont += 1;
-
-        if (cont >= 15) {
-            checkMoviment();
-        }
-    }
-
-    function checkMoviment() {
-        avgx = listx.avg();
-        avgy = listy.avg();
-        avgz = listz.avg();
-        listx = [];
-        listy = [];
-        listz = [];
-        cont = 0;
-        if (avgx > 180 && avgx < 300 && avgy >= -40 && avgy <= 40 && avgz >= -60 && avgz <= 60) {
-            console.log("Initial Moviment - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
-            ball.style.background = 'green';
-            cheers = true;
-            return true;
-        }
-     
-        if (avgx > 170 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
-            callback();
-            cheers = false;
-            console.log("Final Moviment - ", avgx, avgy, avgz);
-            return true;
-        }
-        return false;
-    }
-
-
-
- 
+};
 
 
 Array.prototype.avg = function () {
