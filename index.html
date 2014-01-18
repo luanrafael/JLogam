@@ -55,7 +55,18 @@
 <h3>
 <a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link">How to use?</span></a></h3>
 
-<p>Writting...</p>
+<p>First use de function <code>JLogam.setup()</code> to configure JLogam. This function returns true when the library is supported by the browser. See the following example.</p>
+<pre>
+  <code>
+    if(JLogam.setup()){
+        JLogam.on(
+          "cheers",
+           function(){
+              alert("I'm using the JLogam Library!");
+         });
+    }
+  </code>
+</pre>
 
 <h3>
 <a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link">Demo</span></a></h3>

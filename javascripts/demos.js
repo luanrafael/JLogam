@@ -8,3 +8,15 @@ function cliSimulate(){
 	}
 	return false;
 }
+
+
+
+
+
+
+JLogam.set(function (){
+	if(supportsVibrate){
+		navigator.vibrate(1000);
+	}
+    window.location.assign("https://twitter.com/intent/tweet?hashtags=JLogam%2C&original_referer=http%3A%2F%2Flocalhost%3A8080%2FJLogam%2Fdemo%2Fcheers.html&related=lrpinheiroo&text=JLogam%20-%20JavaScript%20Libary%20for%20Open%20Gestures%20Acessibility%20Mobile&tw_p=tweetbutton");
+});
