@@ -107,15 +107,18 @@ function checkMoviment(){
 
 
 function cheers () {
-        bb = document.getElementById("bolinha");
-        if (avgx > 180 && avgx < 300 && avgy >= -40 && avgy <= 40 && avgz >= -60 && avgz <= 60) {
-            isCheersConfigured = true;
-            bb.style.background = "green";
-            return false;
+        if(!isCheersConfigured){        
+            console.log("Moviment 1 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+            if (avgx > 115 && avgx < 300 && avgy >= -15 && avgy <= 15 && avgz >= -60 && avgz <= 60) {
+                isCheersConfigured = true;
+                bb.style.background = "green";
+                return false;
+            }
         }
         
         if(isCheersConfigured){
-            if (avgx > 170 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
+            console.log("Moviment 2 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+            if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
                 isCheersConfigured = false;
                 callback();
                 return true;
