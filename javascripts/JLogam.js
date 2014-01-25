@@ -13,17 +13,14 @@ var listgestures = [];
 var cont = 0;
 var callback;
 var isCheersConfigured;
+var isYesConfigured;
+var isNoConfigured;
+var isSeccondYesMoviment;
+var isSeccondNoMoviment;
 
 
-function JLogamSetup(){
-    listgestures[0] = "cheers";
-    isCheersConfigured = false;
-    return isSupported();
-}
-
-
-function isSupported(){
-    if (window.DeviceOrientationEvent){
+function isSupported() {
+    if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', gestureListener, false);
         return true;
     }
@@ -33,28 +30,34 @@ function isSupported(){
 
 JLogam = {
 
-    'setup' : function (){
+    'setup': function () {
         listgestures[0] = "cheers";
+        listgestures[1] = "yes";
+        listgestures[2] = "no";
         isCheersConfigured = false;
+        isYesConfigured = false;
+        isNoConfigured = false;
+        isSeccondYesMoviment = false;
+        isSeccondNoMoviment = false;
         return isSupported();
     },
 
-    'on' : function(arggesture,argcallback){
+        'on': function (arggesture, argcallback) {
         gestures[arggesture] = argcallback;
     },
 
-    'off' : function (arggesture){
-        gestures[arggesture] = '';  
+        'off': function (arggesture) {
+        gestures[arggesture] = '';
     }
 
 };
 
-function gestureListener(event){
+function gestureListener(event) {
     var x = event.alpha;
     var y = event.beta;
     var z = event.gamma;
 
-    if(x === null && y === null && z === null){
+    if (x === null && y === null && z === null) {
         alert("JLogam is not supported");
     }
 
@@ -67,7 +70,7 @@ function gestureListener(event){
         roundX = Math.round(alpha);
         roundY = Math.round(beta);
         roundZ = Math.round(gamma);
-        setInterval(readData(roundX, roundY, roundZ), 500);
+        readData(roundX, roundY, roundZ);
         return true;
     }
     return false;
@@ -88,7 +91,7 @@ function readData(alpha, beta, gamma) {
 }
 
 
-function checkMoviment(){
+function checkMoviment() {
     avgx = listx.avg();
     avgy = listy.avg();
     avgz = listz.avg();
@@ -96,38 +99,95 @@ function checkMoviment(){
     listy = [];
     listz = [];
     cont = 0;
+    console.log("Moviment - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
     for (var i = listgestures.length - 1; i >= 0; i--) {
         var argexec = listgestures[i];
         callback = gestures[argexec];
-        if(callback != ''){
+        if (callback !== undefined) {
             window[argexec].call();
-        }       
+        }
     }
 }
 
 
-function cheers () {
-        bb = document.getElementById("bolinha");
-        if(!isCheersConfigured){        
-            console.log("Moviment 1 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
-            if (avgx > 115 && avgx < 300 && avgy >= -15 && avgy <= 15 && avgz >= -60 && avgz <= 60) {
-                isCheersConfigured = true;
-                bb.style.background = "green";
-                return false;
-            }
+function cheers() {
+    console.log("cheking - cheers");
+    bb = document.getElementById("bolinha");
+    if (!isCheersConfigured) {
+        console.log("Moviment 1 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        if (avgx > 115 && avgx < 300 && avgy >= -15 && avgy <= 15 && avgz >= -60 && avgz <= 60) {
+            isCheersConfigured = true;
+            bb.style.background = "green";
+            return false;
         }
-        
-        if(isCheersConfigured){
-            console.log("Moviment 2 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
-            if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
-                isCheersConfigured = false;
+    }
+
+    if (isCheersConfigured) {
+        console.log("Moviment 2 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
+            isCheersConfigured = false;
+            callback();
+            return true;
+        }
+    }
+    return false;
+
+}
+
+
+function yes() {
+    console.log("cheking - YES");
+    // Moviment 1
+    if (!isYesConfigured) {
+        console.log("Trying Moviment 1 - YES - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60) {
+            if (isSeccondYesMoviment) {
+                isSeccondYesMoviment = false;
                 callback();
                 return true;
             }
+            isYesConfigured = true;
+            return false;
         }
-        return false;
+    }
 
-};
+    // Moviment 2
+    if (isYesConfigured) {
+        console.log("Trying Moviment 2 - YES - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        if (avgx > 50 && avgx < 160 && ((avgy >= -190 && avgy <= -80) || (avgy <= 190 && avgy >= 80)) && avgz >= -60 && avgz <= 60) {
+            isYesConfigured = false;
+            isSeccondYesMoviment = true;
+            return false;
+        }
+    }
+
+    return false;
+}
+
+
+function no() {
+    console.log("cheking - no");
+    if (!isNoConfigured) {
+        console.log("Trying Moviment 1 - NO - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        if (avgx >= 120 && avgx <= 200 && ((avgy >= -200 && avgy <= -120) || (avgy >= 120 && avgy <= 200)) && avgz >= -60 && avgz <= 60) {
+            if (isSeccondNoMoviment) {
+                isSeccondNoMoviment = false;
+                callback();
+                return true;
+            }
+            isNoConfigured = true;
+            return false;
+        }
+    }
+    if (isNoConfigured) {
+        console.log("Trying Moviment 2 - NO - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        if (avgx >= 30 && avgx < 100 && ((avgy >= -160 && avgy <= -120) || (avgy >= 120 && avgy <= 160)) && avgz >= -60 && avgz <= 60) {
+            isNoConfigured = false;
+            isSeccondNoMoviment = true;
+            return false;
+        }
+    }
+}
 
 
 Array.prototype.avg = function () {

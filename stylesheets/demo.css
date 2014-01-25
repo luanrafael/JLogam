@@ -4,3 +4,25 @@
 	width: 20px;
 	height: 20px;
 }
+
+
+#cards {
+    border-radius: 10px;
+    margin: 0 auto;
+    width: 80%;
+    height: 20%;
+    background: #eee;
+    overflow: auto;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    color: #000000;
+}
+
+polymer-ui-card {
+    display: block;
+    height: 10%;
+    width: 20%;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: #FFFFFF;
+}
