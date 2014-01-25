@@ -70,7 +70,7 @@ function gestureListener(event){
         roundX = Math.round(alpha);
         roundY = Math.round(beta);
         roundZ = Math.round(gamma);
-        setInterval(readData(roundX, roundY, roundZ), 500);
+        readData(roundX, roundY, roundZ);
         return true;
     }
     return false;
@@ -133,57 +133,56 @@ function cheers () {
 };
 
 
-function yes(){
+function yes() {
     console.log("cheking - YES");
     // Moviment 1
-    if(!isYesConfigured){
+    if (!isYesConfigured) {
         console.log("Trying Moviment 1 - YES - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
-        if (avgx > 100 && avgx < 170 && ((avgy >= -70 && avgy <= -20) || (avgy <= 70 && avgy >= 20)) && avgz >= -20 && avgz <= 20) {
+        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60) {
+            if (isSeccondYesMoviment) {
+                isSeccondYesMoviment = false;
+                callback();
+                return true;
+            }
             isYesConfigured = true;
             return false;
         }
     }
 
     // Moviment 2
-    if(isYesConfigured){
+    if (isYesConfigured) {
         console.log("Trying Moviment 2 - YES - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
-        if (avgx > 170 && avgx < 340 && ((avgy >= -170 && avgy <= -80) || (avgy <= 170 && avgy >= 80)) && avgz >= -20 && avgz <= 20) {
-            if(!isSeccondYesMoviment){
-                isSeccondYesMoviment = true;
-                isYesConfigured = false;
-            } else {
-                isSeccondYesMoviment = false;
-                callback();
-                return true;
-            }
+        if (avgx > 50 && avgx < 160 && ((avgy >= -190 && avgy <= -80) || (avgy <= 190 && avgy >= 80)) && avgz >= -60 && avgz <= 60) {
+            isYesConfigured = false;
+            isSeccondYesMoviment = true;
             return false;
         }
     }
-    return true;
+
+    return false;
 }
 
 
-function no(){
+function no() {
     console.log("cheking - no");
-    if(!isNoConfigured){
+    if (!isNoConfigured) {
         console.log("Trying Moviment 1 - NO - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
-        if ( avgx < 140 && avgy >= -50 && avgz >= -60 && avgz <= 60) {
-                isNoConfigured = true;
-                return false;
+        if (avgx >= 120 && avgx <= 200 && ((avgy >= -200 && avgy <= -120) || (avgy >= 120 && avgy <= 200)) && avgz >= -60 && avgz <= 60) {
+            if (isSeccondNoMoviment) {
+                isSeccondNoMoviment = false;
+                callback();
+                return true;
+            }
+            isNoConfigured = true;
+            return false;
         }
     }
-    if(isNoConfigured){
+    if (isNoConfigured) {
         console.log("Trying Moviment 2 - NO - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
-        if (avgx > 180 && avgy >= -50 && avgz >= -60 && avgz <= 60) {
-                if(!isSeccondNoMoviment){
-                    isSeccondNoMoviment = true;
-                    isNoConfigured = false;
-                } else {
-                    isSeccondNoMoviment = false;
-                    callback();
-                    return true;
-                }
-                return false;
+        if (avgx >= 30 && avgx < 100 && ((avgy >= -160 && avgy <= -120) || (avgy >= 120 && avgy <= 160)) && avgz >= -60 && avgz <= 60) {
+            isNoConfigured = false;
+            isSeccondNoMoviment = true;
+            return false;
         }
     }
 }
