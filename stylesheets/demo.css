@@ -1,8 +1,8 @@
 #bolinha{
-	border-radius: 20px;
-	background-color: red;
-	width: 20px;
-	height: 20px;
+    border-radius: 20px;
+    background-color: red;
+    width: 20px;
+    height: 20px;
 }
 
 
@@ -11,7 +11,6 @@
     margin: 0 auto;
     width: 80%;
     height: 20%;
-    background: #eee;
     overflow: auto;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -25,4 +24,8 @@ polymer-ui-card {
     margin: 20px auto;
     padding: 30px;
     background-color: #FFFFFF;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 20px;
 }
