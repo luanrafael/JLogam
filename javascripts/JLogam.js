@@ -8,7 +8,7 @@ var listz = [];
 
 var gestures = [];
 
-var listgestures = [];
+var gesturelist = [];
 
 var cont = 0;
 var callback;
@@ -31,14 +31,31 @@ function isSupported() {
 JLogam = {
 
     'setup': function () {
-        listgestures[0] = "cheers";
-        listgestures[1] = "yes";
-        listgestures[2] = "no";
+        gesturelist[0] = "cheers";
         isCheersConfigured = false;
+
+        gesturelist[1] = "yes";
         isYesConfigured = false;
-        isNoConfigured = false;
         isSeccondYesMoviment = false;
+
+        gesturelist[2] = "no";
+        isNoConfigured = false;
         isSeccondNoMoviment = false;
+        
+        gesturelist[3] = "victory";
+        isVictoryConfigured = false;
+        
+        gesturelist[4] = "front";
+        isFrontConfigured = false;
+
+        gesturelist[5] = "back";
+        isBackConfigured = false;
+        
+        gesturelist[6] = "left";
+        isLeftConfigured = false;
+
+        gesturelist[7] = "right";
+        isRightConfigured = false;
         return isSupported();
     },
 
@@ -99,9 +116,9 @@ function checkMoviment() {
     listy = [];
     listz = [];
     cont = 0;
-    console.log("Moviment - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
-    for (var i = listgestures.length - 1; i >= 0; i--) {
-        var argexec = listgestures[i];
+    console.log("Moviment \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+    for (var i = gesturelist.length - 1; i >= 0; i--) {
+        var argexec = gesturelist[i];
         callback = gestures[argexec];
         if (callback !== undefined) {
             window[argexec].call();
@@ -114,7 +131,7 @@ function cheers() {
     console.log("cheking - cheers");
     bb = document.getElementById("bolinha");
     if (!isCheersConfigured) {
-        console.log("Moviment 1 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        console.log("Moviment 1 \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
         if (avgx > 115 && avgx < 300 && avgy >= -15 && avgy <= 15 && avgz >= -60 && avgz <= 60) {
             isCheersConfigured = true;
             bb.style.background = "green";
@@ -123,7 +140,7 @@ function cheers() {
     }
 
     if (isCheersConfigured) {
-        console.log("Moviment 2 - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        console.log("Moviment 2 \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
         if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
             isCheersConfigured = false;
             callback();
@@ -139,7 +156,7 @@ function yes() {
     console.log("cheking - YES");
     // Moviment 1
     if (!isYesConfigured) {
-        console.log("Trying Moviment 1 - YES - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        console.log("Trying Moviment 1 - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
         if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60) {
             if (isSeccondYesMoviment) {
                 isSeccondYesMoviment = false;
@@ -153,7 +170,7 @@ function yes() {
 
     // Moviment 2
     if (isYesConfigured) {
-        console.log("Trying Moviment 2 - YES - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        console.log("Trying Moviment 2 - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
         if (avgx > 50 && avgx < 160 && ((avgy >= -190 && avgy <= -80) || (avgy <= 190 && avgy >= 80)) && avgz >= -60 && avgz <= 60) {
             isYesConfigured = false;
             isSeccondYesMoviment = true;
@@ -168,7 +185,7 @@ function yes() {
 function no() {
     console.log("cheking - no");
     if (!isNoConfigured) {
-        console.log("Trying Moviment 1 - NO - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        console.log("Trying Moviment 1 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
         if (avgx >= 120 && avgx <= 200 && ((avgy >= -200 && avgy <= -120) || (avgy >= 120 && avgy <= 200)) && avgz >= -60 && avgz <= 60) {
             if (isSeccondNoMoviment) {
                 isSeccondNoMoviment = false;
@@ -180,7 +197,7 @@ function no() {
         }
     }
     if (isNoConfigured) {
-        console.log("Trying Moviment 2 - NO - X: " + avgx + " Y: " + avgy + " Z: " + avgz);
+        console.log("Trying Moviment 2 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
         if (avgx >= 30 && avgx < 100 && ((avgy >= -160 && avgy <= -120) || (avgy >= 120 && avgy <= 160)) && avgz >= -60 && avgz <= 60) {
             isNoConfigured = false;
             isSeccondNoMoviment = true;
@@ -189,6 +206,113 @@ function no() {
     }
 }
 
+
+
+function victory(){
+     // return   monitor();
+
+    console.log("cheking - victory");
+    if (!isVictoryConfigured) {
+        console.log("Trying Moviment 1 - victory \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx >= 300 && ((avgy >= -25 && avgy <= -5) || (avgy >= 5 && avgy <= 25)) && avgz >= -20 && avgz <= 20) {  
+            isVictoryConfigured = true;
+            return false;
+        }
+    }
+    if (isVictoryConfigured) {
+        console.log("Trying Moviment 2 - victory \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx >= 100 && avgx < 200 && ((avgy >= -100 && avgy <= -15) || (avgy >= 15 && avgy <= 100)) && avgz <= -50) {
+            isVictoryConfigured = false;
+            callback();
+            return true;
+        }
+    }
+}
+
+function front(){
+    console.log("cheking - front");
+    if(!isFrontConfigured){    
+        console.log("Trying Moviment 1 - front \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60){
+            isFrontConfigured = true;
+            return false;
+        }
+    }
+    if(isFrontConfigured){
+        console.log("Trying Moviment 2 - front \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx >= 200 && avgx <= 250 && ((avgy >= -190 && avgy <= -120) || (avgy >= 120 && avgy <= 190)) && avgz >= 60) {  
+            isFrontConfigured = false;
+            callback();
+            return true;
+        }
+    }
+}
+
+function back(){
+    console.log("cheking - back");
+    // return monitor();
+    if(!isBackConfigured){    
+        console.log("Trying Moviment 1 - back \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60){
+            isBackConfigured = true;
+            return false;
+        }
+    }
+    if(isBackConfigured){
+        console.log("Trying Moviment 2 - back \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx >= 50 && avgx <= 100 && ((avgy >= -190 && avgy <= -120) || (avgy >= 120 && avgy <= 190)) && avgz <= -60) {  
+            isBackConfigured = false;
+            callback();
+            return true;
+        }
+    }
+}
+
+
+function left(){
+    console.log("cheking - left");
+    // return monitor();
+    if(!isLeftConfigured){    
+        console.log("Trying Moviment 1 - left \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60){
+            isLeftConfigured = true;
+            return false;
+        }
+    }
+    if(isLeftConfigured){
+        console.log("Trying Moviment 2 - left \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx >= 100 && avgx <= 150 && ((avgy >= -160 && avgy <= -80) || (avgy >= 80 && avgy <= 160)) && avgz > 75) {  
+            isLeftConfigured = false;
+            callback();
+            return true;
+        }
+    }
+}
+
+function right(){
+    console.log("cheking - right");
+    // return monitor();
+    if(!isRightConfigured){    
+        console.log("Trying Moviment 1 - right \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60){
+            isRightConfigured = true;
+            return false;
+        }
+    }
+    if(isRightConfigured){
+        console.log("Trying Moviment 2 - right \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+        if (avgx >= 300 && ((avgy >= -160 && avgy <= -80) || (avgy >= 80 && avgy <= 160)) && avgz <= -60) {  
+            isRightConfigured = false;
+            callback();
+            return true;
+        }
+    }
+}
+
+function monitor(){
+    console.log("monitor\nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+    return true;
+}
 
 Array.prototype.avg = function () {
     var av = 0;
