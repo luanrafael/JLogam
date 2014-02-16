@@ -209,20 +209,21 @@ function no() {
 
 
 function victory(){
-     // return   monitor();
 
     console.log("cheking - victory");
     if (!isVictoryConfigured) {
         console.log("Trying Moviment 1 - victory \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 300 && ((avgy >= -25 && avgy <= -5) || (avgy >= 5 && avgy <= 25)) && avgz >= -20 && avgz <= 20) {  
+        if (avgx >= 120 && avgx <= 250 && ((avgy >= -25 && avgy <= -5) || (avgy >= 5 && avgy <= 25)) && avgz >= -20 && avgz <= 20) {  
             isVictoryConfigured = true;
+            verde();
             return false;
         }
     }
     if (isVictoryConfigured) {
         console.log("Trying Moviment 2 - victory \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 100 && avgx < 200 && ((avgy >= -100 && avgy <= -15) || (avgy >= 15 && avgy <= 100)) && avgz <= -50) {
+        if (avgx >= 50 && avgx < 100 && ((avgy >= -100 && avgy <= -15) || (avgy >= 15 && avgy <= 100)) && avgz <= -50) {
             isVictoryConfigured = false;
+            azul();
             callback();
             return true;
         }
@@ -328,3 +329,13 @@ Array.prototype.avg = function () {
     }
     return av / cnt;
 };
+
+
+
+function azul(){
+    document.getElementById("bolinha").style.background = 'blue';   
+}
+
+function verde(){
+    document.getElementById("bolinha").style.background = 'green';
+}
