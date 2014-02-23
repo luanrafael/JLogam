@@ -157,6 +157,9 @@ function yes() {
     if (!isYesConfigured) {
         console.log("Trying Moviment 1 - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
         if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -120) || (avgy >= 50 && avgy <= 120)) && avgz >= -60 && avgz <= 60) {
+
+            isNoConfigured = false;
+            isSeccondNoMoviment = false;
             if (isSeccondYesMoviment) {
                 isSeccondYesMoviment = false;
                 callback();
@@ -166,10 +169,9 @@ function yes() {
             return false;
         }
     }
-
     if (isYesConfigured) {
         console.log("Trying Moviment 2 - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 150 && avgx < 250 && ((avgy >= -200 && avgy <= -130) || (avgy >= 130 && avgy <= 200)) && avgz >= -40 && avgz <= 40) {
+        if (avgx >= 120 && avgx < 180 && ((avgy >= -200 && avgy <= -150) || (avgy >= 150 && avgy <= 200)) && avgz >= -10 && avgz <= 10) {
             isYesConfigured = false;
             isSeccondYesMoviment = true;
             return false;
@@ -184,7 +186,9 @@ function no() {
     console.log("cheking - no");
     if (!isNoConfigured) {
         console.log("Trying Moviment 1 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 160 && avgx <= 250 && ((avgy >= -200 && avgy <= -100) || (avgy >= 100 && avgy <= 200)) && avgz >= -60 && avgz <= 60) {
+        if (avgx >= 180 && avgx <= 250 && ((avgy >= -130 && avgy <= -95) || (avgy >= 95 && avgy <= 130)) && avgz <= -20) {
+            isYesConfigured = false;
+            isSeccondYesMoviment = false;
             if (isSeccondNoMoviment) {
                 isSeccondNoMoviment = false;
                 callback();
