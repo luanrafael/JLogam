@@ -154,6 +154,7 @@ function cheers() {
 
 function yes() {
     console.log("cheking - YES");
+    // return monitor();
     // Moviment 1
     if (!isYesConfigured) {
         console.log("Trying Moviment 1 - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
@@ -164,6 +165,7 @@ function yes() {
             if (isSeccondYesMoviment) {
                 isSeccondYesMoviment = false;
                 callback();
+                azul();
                 return true;
             }
 
@@ -176,7 +178,7 @@ function yes() {
     // Moviment 2
     if (isYesConfigured) {
         console.log("Trying Moviment 2 - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 120 && avgx < 180 && ((avgy >= -200 && avgy <= -150) || (avgy >= 150 && avgy <= 200)) && avgz >= -10 && avgz <= 10) {
+        if (avgx >= 60 && avgx < 250 && ((avgy >= -200 && avgy <= -150) || (avgy >= 150 && avgy <= 200)) && avgz >= -10 && avgz <= 10) {
             isYesConfigured = false;
             isSeccondYesMoviment = true;
             vibrar();
@@ -191,15 +193,17 @@ function yes() {
 
 function no() {
     console.log("cheking - no");
+    // return monitor();
     if (!isNoConfigured) {
         console.log("Trying Moviment 1 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 180 && avgx <= 250 && ((avgy >= -130 && avgy <= -95) || (avgy >= 95 && avgy <= 130)) && avgz <= -20) {
+        if (avgx >= 180 && avgx <= 250 && ((avgy >= -130 && avgy <= -30) || (avgy >= 30 && avgy <= 130)) && avgz <= -20) {
             console.log("ENTREI");
             isYesConfigured = false;
             isSeccondYesMoviment = false;
             if (isSeccondNoMoviment) {
                 isSeccondNoMoviment = false;
                 callback();
+                azul();
                 return true;
             }
             amarelo();
@@ -209,7 +213,7 @@ function no() {
     }
     if (isNoConfigured) {
         console.log("Trying Moviment 2 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 30 && avgx < 150 && ((avgy >= -150 && avgy <= -110) || (avgy >= 100 && avgy <= 150)) && avgz >= -60 && avgz <= 60) {
+        if (avgx >= 30 && avgx < 150 && ((avgy >= -160 && avgy <= -110) || (avgy >= 110 && avgy <= 160)) && avgz >= -20 && avgz <= 80) {
             isNoConfigured = false;
             isSeccondNoMoviment = true;
             verde();
