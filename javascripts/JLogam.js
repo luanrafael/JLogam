@@ -18,56 +18,114 @@ var isNoConfigured;
 var isSeccondYesMoviment;
 var isSeccondNoMoviment;
 
+//Motion variables.
+var listacx = [];
+var listacy = [];
+var listacz = [];
+var k = 0;
 
 function isSupported() {
-    if (window.DeviceOrientationEvent) {
+    
+    if (window.DeviceOrientationEvent && window.DeviceMotionEvent) {
+ 
         window.addEventListener('deviceorientation', gestureListener, false);
+        window.addEventListener('devicemotion', motionListener, false);
+
+
         return true;
+ 
     }
+ 
     return false;
+
 }
 
 
 JLogam = {
 
-    'setup': function () {
-        gesturelist[0] = "cheers";
-        isCheersConfigured = false;
+'setup': function () {
+    gesturelist[0] = "cheers";
+    isCheersConfigured = false;
 
-        gesturelist[1] = "yes";
-        isYesConfigured = false;
-        isSeccondYesMoviment = false;
+    gesturelist[1] = "yes";
+    isYesConfigured = false;
+    isSeccondYesMoviment = false;
 
-        gesturelist[2] = "no";
-        isNoConfigured = false;
-        isSeccondNoMoviment = false;
-        
-        gesturelist[3] = "victory";
-        isVictoryConfigured = false;
-        
-        gesturelist[4] = "front";
-        isFrontConfigured = false;
+    gesturelist[2] = "no";
+    isNoConfigured = false;
+    isSeccondNoMoviment = false;
 
-        gesturelist[5] = "back";
-        isBackConfigured = false;
-        
-        gesturelist[6] = "left";
-        isLeftConfigured = false;
+    gesturelist[3] = "victory";
+    isVictoryConfigured = false;
 
-        gesturelist[7] = "right";
-        isRightConfigured = false;
-        return isSupported();
-    },
+    gesturelist[4] = "front";
+    isFrontConfigured = false;
 
-        'on': function (arggesture, argcallback) {
-        gestures[arggesture] = argcallback;
-    },
+    gesturelist[5] = "back";
+    isBackConfigured = false;
 
-        'off': function (arggesture) {
-        gestures[arggesture] = '';
-    }
+    gesturelist[6] = "left";
+    isLeftConfigured = false;
+
+    gesturelist[7] = "right";
+    isRightConfigured = false;
+    return isSupported();
+},
+
+    'on': function (arggesture, argcallback) {
+    gestures[arggesture] = argcallback;
+},
+
+    'off': function (arggesture) {
+    gestures[arggesture] = '';
+}
 
 };
+
+function motionListener(event){
+
+    var acx = (event.acceleration.x * 100);
+    var acy = (event.acceleration.y * 100);
+    var acz = (event.acceleration.z * 100);
+
+
+    if(k == 10){
+        // listacx = [];
+        // listacy = [];
+        // listacz = [];
+        k = 0;
+    }
+
+    listacx[k] = acx;
+    listacy[k] = acy;
+    listacz[k] = acz;
+
+    ++k;
+
+}
+
+
+
+function getAxys(axys){
+    axys = axys.toLowerCase();
+    if(listacx.avg() > listacy.avg() && listacx.avg() > listacz.avg() && axys == 'x'){
+        console.log("X");
+        return true;
+    }
+
+    if(listacy.avg() > listacx.avg() && listacy.avg() > listacz.avg() && axys == 'y'){
+        console.log("Y");
+        return true;
+    }
+
+    if(listacz.avg() > listacx.avg() && listacz.avg() > listacy.avg() && axys == 'z'){
+        console.log("X");
+        return true;
+    }
+
+    return false;
+}
+
 
 function gestureListener(event) {
     var x = event.alpha;
@@ -95,7 +153,6 @@ function gestureListener(event) {
 
 
 function readData(alpha, beta, gamma) {
-
     listx[cont] = alpha;
     listy[cont] = beta;
     listz[cont] = gamma;
@@ -128,26 +185,26 @@ function checkMoviment() {
 
 
 function cheers() {
-    console.log("cheking - cheers");
-    bb = document.getElementById("bolinha");
-    if (!isCheersConfigured) {
-        console.log("Moviment 1 \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx > 115 && avgx < 300 && avgy >= -15 && avgy <= 15 && avgz >= -60 && avgz <= 60) {
-            isCheersConfigured = true;
-            bb.style.background = "green";
-            return false;
-        }
+console.log("cheking - cheers");
+bb = document.getElementById("bolinha");
+if (!isCheersConfigured) {
+    console.log("Moviment 1 \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+    if (avgy >= -15 && avgy <= 15 && avgz >= -60 && avgz <= 60) {
+        isCheersConfigured = true;
+        bb.style.background = "green";
+        return false;
     }
+}
 
-    if (isCheersConfigured) {
-        console.log("Moviment 2 \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
-            isCheersConfigured = false;
-            callback();
-            return true;
-        }
+if (isCheersConfigured) {
+    console.log("Moviment 2 \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
+    if ((avgy >= -130  && avgy <= -70 ) || (avgy >= 70 && avgy <= 130) && avgz >= -20 &&  avgz <= 20) {
+        isCheersConfigured = false;
+        callback();
+        return true;
     }
-    return false;
+}
+return false;
 
 }
 
@@ -158,14 +215,13 @@ function yes() {
     // Moviment 1
     if (!isYesConfigured) {
         console.log("Trying Moviment 1 - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -120) || (avgy >= 50 && avgy <= 120)) && avgz >= -60 && avgz <= 60) {
-
+        if (getAxys('x') && ((avgx >= 60 && avgx <= 150) || (avgx >= 250 && avgx <= 350)) && ((avgy <= -50 && avgy >= -130) || (avgy >= 50 && avgy <= 130)) && avgz >= -20 && avgz <= 20) {
             isNoConfigured = false;
             isSeccondNoMoviment = false;
             if (isSeccondYesMoviment) {
                 isSeccondYesMoviment = false;
-                callback();
                 azul();
+                callback();
                 return true;
             }
 
@@ -178,16 +234,15 @@ function yes() {
     // Moviment 2
     if (isYesConfigured) {
         console.log("Trying Moviment 2 - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 60 && avgx < 250 && ((avgy >= -200 && avgy <= -150) || (avgy >= 150 && avgy <= 200)) && avgz >= -10 && avgz <= 10) {
+        if  (getAxys('x') && ((avgx >= 150 && avgx <= 350) || (avgx >= 15 && avgx <= 80)) && ((avgy >= -200 && avgy <= -90) || (avgy >= 90 && avgy <= 200)) && avgz >= -10 && avgz <= 10) {
+            console.log("####### - YES \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
             isYesConfigured = false;
             isSeccondYesMoviment = true;
             vibrar();
             verde();
             return false;
-        }
+        }   
     }
-
-    return false;
 }
 
 
@@ -196,14 +251,15 @@ function no() {
     // return monitor();
     if (!isNoConfigured) {
         console.log("Trying Moviment 1 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 180 && avgx <= 250 && ((avgy >= -130 && avgy <= -30) || (avgy >= 30 && avgy <= 130)) && avgz <= -20) {
-            console.log("ENTREI");
+        if(avgz > 10)
+        if (avgx >= 280 && avgx <= 360 && ((avgy >= -140 && avgy <= -30) || (avgy >= 30 && avgy <= 140))) {
+            console.log("############## 1 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
             isYesConfigured = false;
             isSeccondYesMoviment = false;
             if (isSeccondNoMoviment) {
                 isSeccondNoMoviment = false;
-                callback();
                 azul();
+                callback();
                 return true;
             }
             amarelo();
@@ -213,7 +269,8 @@ function no() {
     }
     if (isNoConfigured) {
         console.log("Trying Moviment 2 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 30 && avgx < 150 && ((avgy >= -160 && avgy <= -110) || (avgy >= 110 && avgy <= 160)) && avgz >= -20 && avgz <= 80) {
+        if (getAxys('y') &&  avgx >= 60 && avgx < 190 && ((avgy >= -160 && avgy <= -80) || (avgy >= 80 && avgy <= 160))) {
+            console.log("############## 2 - NO \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
             isNoConfigured = false;
             isSeccondNoMoviment = true;
             verde();
@@ -224,12 +281,12 @@ function no() {
 
 
 
-function victory(){
+function victory() {
 
     console.log("cheking - victory");
     if (!isVictoryConfigured) {
         console.log("Trying Moviment 1 - victory \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 120 && avgx <= 250 && ((avgy >= -25 && avgy <= -5) || (avgy >= 5 && avgy <= 25)) && avgz >= -20 && avgz <= 20) {  
+        if (avgx >= 120 && avgx <= 250 && ((avgy >= -25 && avgy <= -5) || (avgy >= 5 && avgy <= 25)) && avgz >= -20 && avgz <= 20) {
             isVictoryConfigured = true;
             verde();
             return false;
@@ -246,19 +303,19 @@ function victory(){
     }
 }
 
-function front(){
+function front() {
     console.log("cheking - front");
-    if(!isFrontConfigured){    
+    if (!isFrontConfigured) {
         console.log("Trying Moviment 1 - front \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60){
+        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60) {
             isFrontConfigured = true;
             verde();
             return false;
         }
     }
-    if(isFrontConfigured){
+    if (isFrontConfigured) {
         console.log("Trying Moviment 2 - front \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 130 && avgx <= 200 && ((avgy >= -190 && avgy <= -120) || (avgy >= 120 && avgy <= 190)) && avgz >= 60) {  
+        if (avgx >= 130 && avgx <= 200 && ((avgy >= -190 && avgy <= -120) || (avgy >= 120 && avgy <= 190)) && avgz >= 60) {
             isFrontConfigured = false;
             vibrar();
             callback();
@@ -267,20 +324,20 @@ function front(){
     }
 }
 
-function back(){
+function back() {
     console.log("cheking - back");
     // return monitor();
-    if(!isBackConfigured){    
+    if (!isBackConfigured) {
         console.log("Trying Moviment 1 - back \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60){
+        if (avgx > 200 && avgx < 300 && ((avgy <= -50 && avgy >= -140) || (avgy >= 50 && avgy <= 140)) && avgz >= -60 && avgz <= 60) {
             isBackConfigured = true;
             verde();
             return false;
         }
     }
-    if(isBackConfigured){
+    if (isBackConfigured) {
         console.log("Trying Moviment 2 - back \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 300 && ((avgy >= -190 && avgy <= -120) || (avgy >= 120 && avgy <= 190)) && avgz <= -60) {  
+        if (avgx >= 300 && ((avgy >= -190 && avgy <= -120) || (avgy >= 120 && avgy <= 190)) && avgz <= -60) {
             isBackConfigured = false;
             vibrar();
             callback();
@@ -290,20 +347,20 @@ function back(){
 }
 
 
-function left(){
+function left() {
     console.log("cheking - left");
     // return monitor();
-    if(!isLeftConfigured){    
+    if (!isLeftConfigured) {
         console.log("Trying Moviment 1 - left \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60){
+        if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
             isLeftConfigured = true;
             verde();
             return false;
         }
     }
-    if(isLeftConfigured){
+    if (isLeftConfigured) {
         console.log("Trying Moviment 2 - left \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 50 && avgx <= 120 && ((avgy >= -180 && avgy <= -20) || (avgy >= 20 && avgy <= 180)) && avgz > 75) {  
+        if (avgx >= 50 && avgx <= 120 && ((avgy >= -180 && avgy <= -20) || (avgy >= 20 && avgy <= 180)) && avgz > 75) {
             isLeftConfigured = false;
             vibrar();
             callback();
@@ -313,19 +370,19 @@ function left(){
 }
 
 
-function right(){
+function right() {
     console.log("cheking - right");
     // return monitor();
-    if(!isRightConfigured){    
+    if (!isRightConfigured) {
         console.log("Trying Moviment 1 - right \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60){
+        if (avgx > 115 && avgx < 300 && ((avgy >= -160 && avgy <= -20) || (avgy <= 160 && avgy >= 20)) && avgz >= -60 && avgz <= 60) {
             isRightConfigured = true;
             return false;
         }
     }
-    if(isRightConfigured){
+    if (isRightConfigured) {
         console.log("Trying Moviment 2 - right \nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
-        if (avgx >= 160 && avgx <= 250 && ((avgy >= -180 && avgy <= -20) || (avgy >= 20 && avgy <= 180)) && avgz <= -60) {  
+        if (avgx >= 160 && avgx <= 250 && ((avgy >= -180 && avgy <= -20) || (avgy >= 20 && avgy <= 180)) && avgz <= -60) {
             isRightConfigured = false;
             vibrar();
             callback();
@@ -334,7 +391,7 @@ function right(){
     }
 }
 
-function monitor(){
+function monitor() {
     console.log("monitor\nX: " + avgx + "\nY: " + avgy + "\nZ: " + avgz + "\n=============================\n");
     return true;
 }
@@ -356,25 +413,25 @@ Array.prototype.avg = function () {
 
 
 
-function azul(){
+function azul() {
     document.getElementById("bolinha").style.background = 'blue';
     return true;
 }
 
-function verde(){
+function verde() {
     document.getElementById("bolinha").style.background = 'green';
     return true;
 }
 
-function amarelo(){
+function amarelo() {
     document.getElementById("bolinha").style.background = 'yellow';
     return true;
 }
 
 
-function vibrar(){
+function vibrar() {
     navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-    if(navigator.vibrate){
+    if (navigator.vibrate) {
         navigator.vibrate(300);
         return true;
     }
